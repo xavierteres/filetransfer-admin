@@ -18,8 +18,8 @@ def delete():
     if user:
         if db.remove_user(username) > 0:
             # TODO: Delete from Nginx config, password and restart
-            return [user]
-    return []
+            return "Success"
+    return "Fail"
 
 
 @app.route("/switchPlan", methods=["POST"])
@@ -29,8 +29,8 @@ def switch_plan():
     if user:
         if db.update_plan(username, not user[2]) > 0:
             # TODO: Update from Nginx config and restart
-            return [user]
-    return []
+            return "Success"
+    return "Fail"
 
 
 @app.route("/updatePassword", methods=["POST"])
@@ -43,8 +43,8 @@ def update_password():
         os.system("htpasswd -b /etc/nginx/.htpasswd " + username + " " + new_password)
         # Reload Nginx
         os.system("systemctl reload nginx")
-        return [user]
-    return []
+        return "Success"
+    return "Fail"
 
 
 @app.route("/users", methods=["POST"])
