@@ -40,7 +40,7 @@ def update_password():
     user = db.get_user(username)
     if user:
         # Create user credentials
-        os.system("htpasswd /etc/nginx/.htpasswd -m " + username + " " + new_password)
+        os.system("htpasswd -b /etc/nginx/.htpasswd " + username + " " + new_password)
         # Reload Nginx
         os.system("systemctl reload nginx")
         return [user]
