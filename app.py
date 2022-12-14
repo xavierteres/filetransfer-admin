@@ -68,7 +68,7 @@ def users():
             for line in file:
                 port = "3500" if paid == 1 else "3000"
                 if "map $remote_user $target_port" in line:
-                    file.write(line + "        " + username + " " + port + "\n")
+                    file.write(line + "        " + username + " " + port + ";\n")
                 else:
                     file.write(line)
 
