@@ -39,7 +39,10 @@ def update_password():
     new_password = request.json["password"]
     user = db.get_user(username)
     if user:
-        # TODO: Update password and restart
+        # Create user credentials
+        os.system("htpasswd /etc/nginx/.htpasswd -m " + username + " " + new_password)
+        # Reload Nginx
+        os.system("systemctl reload nginx")
         print(new_password)
         return [user]
     return []
@@ -61,7 +64,7 @@ def users():
         db.insert_user(username, paid)
 
         # Create user credentials
-        os.system("htpasswd /etc/nginx/.htpasswd -m " + username + password)
+        os.system("htpasswd /etc/nginx/.htpasswd -m " + username + " " + password)
 
         # Add to Nginx configuration file
         with in_place.InPlace('/etc/nginx/nginx.conf') as file:
