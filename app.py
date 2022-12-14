@@ -61,14 +61,14 @@ def users():
         db.insert_user(username, paid)
 
         # Create user credentials
-        os.system("htpasswd /etc/nginx/.htpasswd -m " + user + password)
+        os.system("htpasswd /etc/nginx/.htpasswd -m " + username + password)
 
         # Add to Nginx configuration file
         with in_place.InPlace('/etc/nginx/nginx.conf') as file:
             for line in file:
                 port = "3500" if paid == 1 else "3000"
                 if "map $remote_user $target_port" in line:
-                    file.write(line + "        " + user + " " + port + "\n")
+                    file.write(line + "        " + username + " " + port + "\n")
                 else:
                     file.write(line)
 
