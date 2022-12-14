@@ -18,7 +18,7 @@ def delete():
     if user:
         if db.remove_user(username) > 0:
             # Remove user credentials
-            os.system("htpasswd -D .htpasswd " + username)
+            os.system("htpasswd -D /etc/nginx/.htpasswd " + username)
             # Update Nginx configuration file
             with in_place.InPlace("/etc/nginx/nginx.conf") as file:
                 for line in file:
