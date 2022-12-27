@@ -92,7 +92,7 @@ def users():
 
 
 @app.route("/newUpload", methods=["POST"])
-def users():
+def newUpload():
     sid = request.form["sid"]
     print(sid)
 
