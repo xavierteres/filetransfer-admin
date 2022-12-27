@@ -89,3 +89,11 @@ def users():
         # Reload Nginx
         os.system("systemctl reload nginx")
     return redirect(url_for("index"))
+
+
+@app.route("/newUpload", methods=["POST"])
+def users():
+    sid = request.form["sid"]
+    print(sid)
+
+    return "True"
