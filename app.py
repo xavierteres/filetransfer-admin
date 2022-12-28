@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 import utils.db as db
 import os, in_place
+import shutil
 
 app = Flask(__name__)
 
@@ -93,7 +94,39 @@ def users():
 
 @app.route("/newUpload", methods=["POST"])
 def newUpload():
-    sid = request.form["sid"]
-    print(sid)
+    sid = request.json["metadata"]["sid"]
+    removeKey = request.json["metadata"]["removeKey"]
 
-    return "True"
+    upload = db.get_upload(sid)
+    if not upload:
+        # Add user to db
+        db.insert_upload(sid, removeKey)
+        return "True"
+    else:
+        return "False"
+
+
+@app.route("/deleteUpload", methods=["GET"])
+def deleteUpload():
+    return render_template("delete.html")
+
+
+@app.route("/removeUpload", methods=["POST"])
+def removeUpload():
+    sid = request.form["username"]
+    removeKey = request.form["password"]
+
+    upload = db.get_upload(sid)
+    if upload:
+        print(upload[2])
+        if removeKey == upload[2]:
+            db.remove_upload(sid)
+            # Check if directory exists
+            dir_path = "/root/data/" + sid
+            if os.path.isdir(dir_path):
+                shutil.rmtree(dir_path)
+            return "Upload deleted"
+        else:
+            return "Incorrect delete key"
+
+    return "Incorrect upload SID"
