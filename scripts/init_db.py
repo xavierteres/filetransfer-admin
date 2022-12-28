@@ -2,11 +2,11 @@ import os
 import psycopg2
 
 conn = psycopg2.connect(
-    host="host",
-    port="port",
+    host="localhost",
+    port="5432",
     database="flask_db",
-    user=os.environ["DB_USERNAME"],
-    password=os.environ["DB_PASSWORD"],
+    user="postgres",
+    password="postgres",
 )
 
 cur = conn.cursor()
@@ -18,6 +18,15 @@ cur.execute(
     "paid BOOLEAN NOT NULL,"
     "date_added date DEFAULT CURRENT_TIMESTAMP);"
 )
+
+cur.execute("DROP TABLE IF EXISTS uploads;")
+cur.execute(
+    "CREATE TABLE uploads (id serial PRIMARY KEY,"
+    "sid varchar (50) UNIQUE NOT NULL,"
+    "remove varchar (50) NOT NULL,"
+    "date_added date DEFAULT CURRENT_TIMESTAMP);"
+)
+
 
 cur.execute(
     "INSERT INTO users(username, paid)"
